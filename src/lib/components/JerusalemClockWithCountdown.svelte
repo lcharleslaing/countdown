@@ -3,6 +3,7 @@
   import { HDate } from "@hebcal/core";
   import { DateTime, IANAZone, Duration } from "luxon";
   import Arrow from "./Arrow.svelte";
+  import JesusIsLord from "./JesusIsLord.svelte";
 
   let currentHebrewDate;
   let currentTimeInJerusalem;
@@ -56,6 +57,10 @@
   class="flex items-center justify-center w-screen h-screen bg-cover bg-center"
   style="background-image: url('/rapture.png');"
 >
+  <!-- Jesus is Lord Message -->
+  <div class="absolute top-5 w-full text-center z-30">
+    <div class="text-yellow-500 font-extrabold text-4xl">Jesus is Lord!!!</div>
+  </div>
   <div class="flex flex-col items-center justify-center space-y-1 m-4 z-0">
     <div
       class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-1 p-2 text-slate-100 font-extrabold z-20"

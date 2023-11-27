@@ -75,6 +75,14 @@
 
 ```
 
+## File: lib\components\FlyingUpNames.svelte
+
+```
+<script>
+</script>
+
+```
+
 ## File: lib\components\JerusalemClock.svelte
 
 ```
@@ -130,6 +138,7 @@
   import { HDate } from "@hebcal/core";
   import { DateTime, IANAZone, Duration } from "luxon";
   import Arrow from "./Arrow.svelte";
+  import JesusIsLord from "./JesusIsLord.svelte";
 
   let currentHebrewDate;
   let currentTimeInJerusalem;
@@ -183,6 +192,10 @@
   class="flex items-center justify-center w-screen h-screen bg-cover bg-center"
   style="background-image: url('/rapture.png');"
 >
+  <!-- Jesus is Lord Message -->
+  <div class="absolute top-5 w-full text-center z-30">
+    <div class="text-white font-extrabold text-2xl">Jesus is Lord!!!</div>
+  </div>
   <div class="flex flex-col items-center justify-center space-y-1 m-4 z-0">
     <div
       class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-1 p-2 text-slate-100 font-extrabold z-20"
@@ -204,8 +217,21 @@
       </div>
     </div>
   </div>
+  <JesusIsLord />
   <!-- Inside your Svelte file where you use the Arrow component -->
   <Arrow strokeWidth={2} fillPercentage={countdownPercentage} opacity={0.5} />
+</div>
+
+```
+
+## File: lib\components\JesusIsLord.svelte
+
+```
+<script>
+</script>
+
+<div class="relative top-5 z-50">
+  <div class="text-green-500 font-extrabold">Jesus is Lord!!!</div>
 </div>
 
 ```
