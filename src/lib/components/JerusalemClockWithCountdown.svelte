@@ -1,51 +1,53 @@
 <script>
   import { onMount } from "svelte";
-  import { DateTime, Duration } from "luxon";
-  import Arrow from "./Arrow.svelte";
+  import { DateTime } from "luxon";
 
   let currentTimeInJerusalem;
-  let viewerLocalTime;
+  let viewerLocalEquivalentOfJerusalemTargetTime;
   let countdown;
-  let countdownPercentage;
 
-  // Define the target date and time
-  const targetDateTime = DateTime.local(2023, 12, 7, 16, 35).setZone(
-    "Asia/Jerusalem",
-  );
-  const targetDateTimeEST = DateTime.local(2023, 12, 7, 9, 35).setZone(
-    "America/Detroit",
-  );
+  // Define the target date and time in Jerusalem timezone
+  const targetDateTimeJerusalem = DateTime.fromObject({
+    year: 2023,
+    month: 12,
+    day: 7,
+    hour: 16,
+    minute: 35,
+  }).setZone("Asia/Jerusalem");
 
-  // Convert to user's local timezone
-  const targetDateTimeUserLocal = targetDateTimeEST.toLocal();
+  // Define the target date and time in Jerusalem timezone in UTC
+  const targetDateTimeJerusalemNew = new Date("2023-12-07T16:35:00+02:00"); // Jerusalem time zone offset is +02:00
 
-  // When displaying:
-  const formattedTargetDateTimeUserLocal = targetDateTimeUserLocal.toFormat(
-    "MMM dd, yyyy @ hh:mm a",
-  );
-
-  // Define the start date for the countdown (when the script runs)
-  const startDateTime = DateTime.now().setZone("Asia/Jerusalem");
-  const totalDuration = targetDateTime.diff(startDateTime);
+  function convertToUserLocalTimeJS() {
+    return targetDateTimeJerusalemNew.toLocaleString("en-US", {
+      timeZone: "America/New_York", // Set this to your specific timezone if needed
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+  }
+  function convertToUserTimezone(dateTime) {
+    return dateTime.toLocal().toFormat("MMM dd, yyyy @ hh:mm a");
+  }
 
   function updateCountdown() {
-    const nowInJerusalem = DateTime.now().setZone("Asia/Jerusalem");
-    currentTimeInJerusalem = nowInJerusalem.toFormat("hh:mm a");
+    const now = DateTime.local();
+    currentTimeInJerusalem = now
+      .setZone("Asia/Jerusalem")
+      .toFormat("MMM dd, yyyy @ hh:mm a");
 
-    // Get viewer's local time
-    viewerLocalTime = DateTime.local().toFormat("MMM dd, yyyy @ hh:mm a");
+    viewerLocalEquivalentOfJerusalemTargetTime = convertToUserTimezone(
+      targetDateTimeJerusalem,
+    );
 
-    if (nowInJerusalem < targetDateTime) {
-      const remainingDuration = targetDateTime.diff(nowInJerusalem);
+    if (now < targetDateTimeJerusalem) {
+      const remainingDuration = targetDateTimeJerusalem.diff(now);
       countdown = remainingDuration.toFormat("dd'd' hh'h' mm'm' ss's'");
-      countdownPercentage = Math.max(
-        (1 - remainingDuration.as("seconds") / totalDuration.as("seconds")) *
-          100,
-        0,
-      ).toFixed(2);
     } else {
       countdown = "The target date has passed";
-      countdownPercentage = "100";
     }
   }
 
@@ -61,37 +63,28 @@
   class="flex items-center justify-center w-screen h-screen bg-cover bg-center"
   style="background-image: url('/rapture.png');"
 >
-  <!-- Jesus is Lord Message -->
-  <div class="absolute top-20 w-full text-center z-30">
-    <div class="text-yellow-500 font-extrabold text-5xl">Jesus is Lord!!!</div>
-  </div>
+  <!-- Display Countdown and Equivalent Local Time -->
   <div class="flex flex-col items-center justify-center space-y-1 m-4 z-0">
+    <!-- Display Current Time in Jerusalem -->
     <div
       class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-1 p-2 text-slate-100 font-extrabold z-20"
     >
-      <h1 class="text-2xl">Your Local Time</h1>
-      <div class="text-2xl">{viewerLocalTime}</div>
+      <h1 class="text-2xl font-medium">Jerusalem Time</h1>
+      <div class="text-2xl font-semibold">{currentTimeInJerusalem}</div>
     </div>
-    <div
-      class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-1 p-2 text-slate-100 font-extrabold z-20"
-    >
-      <h1 class="text-2xl">Jerusalem Time</h1>
-      <div class="text-4xl">{currentTimeInJerusalem}</div>
-    </div>
-
+    <!-- Countdown to Target Time -->
     <div
       class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-2 p-2 text-slate-100 font-extrabold z-20"
     >
       <div class="text-4xl">24 Kislev, 5784</div>
-      <div class="text-2xl">Sundown in Jerusalem</div>
-      <div class="text-2xl text-green-700">
-        {formattedTargetDateTimeUserLocal}
+      <div class="text-2xl font-medium">Sundown in Jerusalem</div>
+      <div class="text-sm font-thin">
+        (Equivalent Date/Time in Your Local Timezone)
       </div>
-      <div class="text-4xl text-green-500">
-        {countdown}
+      <div class="text-xl text-green-700 font-medium">
+        {convertToUserLocalTimeJS()}
       </div>
+      <div class="text-4xl text-green-500">{countdown}</div>
     </div>
   </div>
-  <!-- Arrow component -->
-  <!-- <Arrow strokeWidth={2} fillPercentage={countdownPercentage} opacity={0.5} /> -->
 </div>
