@@ -12,6 +12,17 @@
   const targetDateTime = DateTime.local(2023, 12, 7, 16, 35).setZone(
     "Asia/Jerusalem",
   );
+  const targetDateTimeEST = DateTime.local(2023, 12, 7, 9, 35).setZone(
+    "America/Detroit",
+  );
+
+  // Convert to user's local timezone
+  const targetDateTimeUserLocal = targetDateTimeEST.toLocal();
+
+  // When displaying:
+  const formattedTargetDateTimeUserLocal = targetDateTimeUserLocal.toFormat(
+    "MMM dd, yyyy @ hh:mm:ss a",
+  );
 
   // Define the start date for the countdown (when the script runs)
   const startDateTime = DateTime.now().setZone("Asia/Jerusalem");
@@ -73,7 +84,10 @@
     >
       <div class="text-4xl">24 Kislev, 5784</div>
       <div class="text-2xl">Sundown in Jerusalem</div>
-      <div class="text-4xl text-slate-100">
+      <div class="text-2xl text-green-700">
+        {formattedTargetDateTimeUserLocal}
+      </div>
+      <div class="text-4xl text-green-500">
         {countdown}
       </div>
     </div>
