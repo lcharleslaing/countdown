@@ -33,7 +33,7 @@
     currentTimeInJerusalem = nowInJerusalem.toFormat("hh:mm a");
 
     // Get viewer's local time
-    viewerLocalTime = DateTime.local().toFormat("hh:mm a");
+    viewerLocalTime = DateTime.local().toFormat("MMM dd, yyyy @ hh:mm a");
 
     if (nowInJerusalem < targetDateTime) {
       const remainingDuration = targetDateTime.diff(nowInJerusalem);
@@ -70,7 +70,7 @@
       class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-1 p-2 text-slate-100 font-extrabold z-20"
     >
       <h1 class="text-2xl">Your Local Time</h1>
-      <div class="text-4xl">{viewerLocalTime}</div>
+      <div class="text-2xl">{viewerLocalTime}</div>
     </div>
     <div
       class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-1 p-2 text-slate-100 font-extrabold z-20"
