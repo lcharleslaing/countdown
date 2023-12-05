@@ -21,7 +21,7 @@
 
   // When displaying:
   const formattedTargetDateTimeUserLocal = targetDateTimeUserLocal.toFormat(
-    "MMM dd, yyyy @ hh:mm:ss a",
+    "MMM dd, yyyy @ hh:mm a",
   );
 
   // Define the start date for the countdown (when the script runs)
@@ -30,10 +30,10 @@
 
   function updateCountdown() {
     const nowInJerusalem = DateTime.now().setZone("Asia/Jerusalem");
-    currentTimeInJerusalem = nowInJerusalem.toFormat("hh:mm:ss a");
+    currentTimeInJerusalem = nowInJerusalem.toFormat("hh:mm a");
 
     // Get viewer's local time
-    viewerLocalTime = DateTime.local().toFormat("hh:mm:ss a");
+    viewerLocalTime = DateTime.local().toFormat("hh:mm a");
 
     if (nowInJerusalem < targetDateTime) {
       const remainingDuration = targetDateTime.diff(nowInJerusalem);
