@@ -30,15 +30,9 @@
 >
   <section>
     <!-- <JerusalemClockWithCountdownnew /> -->
-    <div class="card">
-      <div class="text-center font-black text-5xl uppercase">
-        Praise God Christians, Let's GOOOO!
-      </div>
-    </div>
     <TimezoneDisplay />
     <LocalClock />
     <JerusalemClock />
     <CountdownTimer />
-    <img src="IMG_2542.jpg" alt="" class="mx-auto rounded-full w-1/2" />
   </section>
 </div>

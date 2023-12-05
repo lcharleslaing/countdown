@@ -5,12 +5,17 @@
 
   function calculateCountdown() {
     const now = new Date();
-    const targetDate = new Date("December 7, 2023 16:35:00").toLocaleString(
-      "en-US",
-      { timeZone: "Asia/Jerusalem" },
+    const nowUtc = Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate(),
+      now.getUTCHours(),
+      now.getUTCMinutes(),
+      now.getUTCSeconds(),
     );
-    const targetTime = new Date(targetDate).getTime();
-    const timeLeft = targetTime - now.getTime();
+    const targetUtc = Date.UTC(2023, 11, 7, 16, 35, 0); // December 7, 2023, 4:35 PM UTC (equivalent to Jerusalem time)
+
+    const timeLeft = targetUtc - nowUtc;
 
     let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
     let hours = Math.floor(
@@ -34,7 +39,7 @@
 <div class="card">
   <div class="mylabel">Countdown to December 7, 2023 4:35pm (Jerusalem):</div>
   <div class="countdowntimer">
-    {countdown.days}d, {countdown.hours}h, {countdown.minutes} m,
+    {countdown.days}d, {countdown.hours}h, {countdown.minutes}m,
     {countdown.seconds}s
   </div>
 </div>
