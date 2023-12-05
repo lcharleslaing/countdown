@@ -63,7 +63,7 @@
 >
   <!-- Jesus is Lord Message -->
   <div class="absolute top-20 w-full text-center z-30">
-    <div class="text-yellow-500 font-extrabold text-6xl">Jesus is Lord!!!</div>
+    <div class="text-yellow-500 font-extrabold text-5xl">Jesus is Lord!!!</div>
   </div>
   <div class="flex flex-col items-center justify-center space-y-1 m-4 z-0">
     <div
