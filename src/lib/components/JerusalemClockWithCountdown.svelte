@@ -1,43 +1,36 @@
 <script>
   import { onMount } from "svelte";
-  import { HDate } from "@hebcal/core";
-  import { DateTime, IANAZone, Duration } from "luxon";
+  import { DateTime, Duration } from "luxon";
   import Arrow from "./Arrow.svelte";
-  import JesusIsLord from "./JesusIsLord.svelte";
 
-  let currentHebrewDate;
   let currentTimeInJerusalem;
+  let viewerLocalTime;
   let countdown;
   let countdownPercentage;
 
-  // Define the start and target dates
-  const targetHebrewYear = 5784; // Example Hebrew year
-  const startFromDate = new HDate(12, "Kislev", targetHebrewYear).greg();
-  const targetGregorianDate = new Date("2023-12-07T18:00:00"); // Example target Gregorian date
+  // Define the target date and time
+  const targetDateTime = DateTime.local(2023, 12, 7, 16, 35).setZone(
+    "Asia/Jerusalem",
+  );
 
-  function updateHebrewDateAndTime() {
-    const today = new Date();
-    const hDate = new HDate(today);
-    currentHebrewDate = hDate.toString("h");
+  // Define the start date for the countdown (when the script runs)
+  const startDateTime = DateTime.now().setZone("Asia/Jerusalem");
+  const totalDuration = targetDateTime.diff(startDateTime);
 
-    const jerusalemZone = new IANAZone("Asia/Jerusalem");
-    const nowInJerusalem = DateTime.now().setZone(jerusalemZone);
+  function updateCountdown() {
+    const nowInJerusalem = DateTime.now().setZone("Asia/Jerusalem");
     currentTimeInJerusalem = nowInJerusalem.toFormat("hh:mm:ss a");
 
-    const targetDateTime =
-      DateTime.fromJSDate(targetGregorianDate).setZone(jerusalemZone);
-    const startDateTime =
-      DateTime.fromJSDate(startFromDate).setZone(jerusalemZone);
+    // Get viewer's local time
+    viewerLocalTime = DateTime.local().toFormat("hh:mm:ss a");
 
     if (nowInJerusalem < targetDateTime) {
-      const totalDuration = targetDateTime.diff(startDateTime);
-      const elapsedDuration = nowInJerusalem.diff(startDateTime);
-      countdown = Duration.fromMillis(
-        targetDateTime.diff(nowInJerusalem),
-      ).toFormat("dd'd' hh'h' mm'm' ss's'");
-      countdownPercentage = Math.min(
-        (elapsedDuration / totalDuration) * 100,
-        100,
+      const remainingDuration = targetDateTime.diff(nowInJerusalem);
+      countdown = remainingDuration.toFormat("dd'd' hh'h' mm'm' ss's'");
+      countdownPercentage = Math.max(
+        (1 - remainingDuration.as("seconds") / totalDuration.as("seconds")) *
+          100,
+        0,
       ).toFixed(2);
     } else {
       countdown = "The target date has passed";
@@ -46,8 +39,8 @@
   }
 
   onMount(() => {
-    updateHebrewDateAndTime();
-    const interval = setInterval(updateHebrewDateAndTime, 1000);
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(interval);
   });
@@ -65,23 +58,26 @@
     <div
       class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-1 p-2 text-slate-100 font-extrabold z-20"
     >
-      <h1>Jerusalem</h1>
-      <div class="text-5xl">{currentHebrewDate}</div>
-      <div class="text-4xl">
-        {currentTimeInJerusalem}
-      </div>
+      <h1 class="text-2xl">Your Local Time</h1>
+      <div class="text-4xl">{viewerLocalTime}</div>
+    </div>
+    <div
+      class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-1 p-2 text-slate-100 font-extrabold z-20"
+    >
+      <h1 class="text-2xl">Jerusalem Time</h1>
+      <div class="text-4xl">{currentTimeInJerusalem}</div>
     </div>
 
     <div
       class="w-full xs:w-80 shadow-md text-center card bg-slate-900 bg-opacity-90 m-2 p-2 text-slate-100 font-extrabold z-20"
     >
-      <div>Countdown to...</div>
-      <h1 class="text-5xl">24 Kislev {targetHebrewYear}</h1>
+      <div class="text-4xl">24 Kislev, 5784</div>
+      <div class="text-2xl">Sundown in Jerusalem</div>
       <div class="text-4xl text-slate-100">
-        {countdown} ({countdownPercentage}%)
+        {countdown}
       </div>
     </div>
   </div>
-  <!-- Inside your Svelte file where you use the Arrow component -->
-  <Arrow strokeWidth={2} fillPercentage={countdownPercentage} opacity={0.5} />
+  <!-- Arrow component -->
+  <!-- <Arrow strokeWidth={2} fillPercentage={countdownPercentage} opacity={0.5} /> -->
 </div>
