@@ -15,12 +15,13 @@
     minute: 35,
   }).setZone("Asia/Jerusalem");
 
-  // Define the target date and time in Jerusalem timezone in UTC
-  const targetDateTimeJerusalemNew = new Date("2023-12-07T16:35:00+02:00"); // Jerusalem time zone offset is +02:00
+  // Convert targetDateTimeJerusalem to UTC for countdown calculation
+  const targetDateTimeUTC = targetDateTimeJerusalem.toUTC();
 
   function convertToUserLocalTimeJS() {
-    // Automatically use the user's current timezone
-    return new Date(targetDateTimeUTC.toISO()).toLocaleString(undefined, {
+    // Conversion for display purposes
+    return new Date(targetDateTimeUTC.toISO()).toLocaleString("en-US", {
+      timeZone: "America/New_York", // Adjust as needed
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -30,22 +31,15 @@
     });
   }
 
-  function convertToUserTimezone(dateTime) {
-    return dateTime.toLocal().toFormat("MMM dd, yyyy @ hh:mm a");
-  }
-
   function updateCountdown() {
-    const now = DateTime.local();
-    currentTimeInJerusalem = now
+    const nowUTC = DateTime.utc();
+
+    currentTimeInJerusalem = nowUTC
       .setZone("Asia/Jerusalem")
       .toFormat("MMM dd, yyyy @ hh:mm a");
 
-    viewerLocalEquivalentOfJerusalemTargetTime = convertToUserTimezone(
-      targetDateTimeJerusalem,
-    );
-
-    if (now < targetDateTimeJerusalem) {
-      const remainingDuration = targetDateTimeJerusalem.diff(now);
+    if (nowUTC < targetDateTimeUTC) {
+      const remainingDuration = targetDateTimeUTC.diff(nowUTC);
       countdown = remainingDuration.toFormat("dd'd' hh'h' mm'm' ss's'");
     } else {
       countdown = "The target date has passed";

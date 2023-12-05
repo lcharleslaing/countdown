@@ -2,3 +2,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.main {
+  @apply  bg-slate-100 h-screen flex flex-col justify-center items-center;
+}
+
+.card {
+  @apply bg-slate-200 rounded-lg shadow-lg m-2 p-2 text-center;
+}
+
+.mylabel {
+  @apply  text-center text-slate-800 font-medium text-sm;
+}
+
+.timezone {
+    @apply  text-xl font-semibold p-1;
+}
+
+.localtime {
+    @apply  text-3xl font-bold color text-white py-1 rounded-sm shadow;
+}
+
+.jerusalemtime {
+    @apply  text-3xl font-bold color text-white py-1 rounded-sm shadow;
+}
+
+.countdowntimer {
+    @apply  text-3xl font-bold text-center bg-green-700 text-white py-1 rounded-sm shadow;
+}
+
+.color {
+    @apply  bg-yellow-600;
+}
